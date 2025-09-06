@@ -1,7 +1,41 @@
+import random
+
 MAX_LINES = 3  # Global Constant
 MAX_BET = 500
 MIN_BET = 1
 
+ROWS = 3
+COLS = 3
+
+REEL_SYMBOLS = {
+    "A": 2,
+    "B": 4,
+    "C": 6,
+    "D": 8
+}
+
+def get_slot_machine_spin(rows, cols, symbols): 
+    all_symbols = []  
+    for symbol, symbol_count in symbols.items():  
+        for _ in range(symbol_count):  
+            all_symbols.append(symbol)  
+
+    columns = []  
+    for _ in range(cols):  
+        column = []  
+        current_symbols = all_symbols[:]  
+        for _ in range(rows):  
+            value = random.choice(current_symbols)  
+            current_symbols.remove(value)  
+            column.append(value)  
+
+        columns.append(column)  
+
+    return columns
+
+def print_slot_machine(columns):
+    for row in range(len(columns[0])):  
+        print(" | ".join(col[row] for col in columns))
 
 def deposit(balance=0):   
     while True:  
@@ -51,7 +85,7 @@ def get_bet():
 
 
 def get_confirmation(bet, lines, total_bet):
-    confirmation = input(f'The bet is ${bet} on {lines} line/lines for a total bet of ${total_bet}. Enter "Y" to confirm or "N" to cancel: ').upper()
+    confirmation = input(f'The bet is ${bet} on {lines} line/lines for a total bet of ${total_bet}. Enter "Y" to confirm the spin or "N" to cancel: ').upper()
     
     return confirmation
 
@@ -74,6 +108,8 @@ def play(balance):
         if confirmation == "Y":
             balance -= total_bet
             print(f"Bet placed! ${total_bet} deducted. Remaining balance: ${balance}")
+            slots = get_slot_machine_spin(ROWS, COLS, REEL_SYMBOLS)
+            print_slot_machine(slots)
         else:
             print("Bet canceled.")
     else:
