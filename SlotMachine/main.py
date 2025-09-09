@@ -7,12 +7,30 @@ MIN_BET = 1
 ROWS = 3
 COLS = 3
 
-REEL_SYMBOLS = {
+symbol_count = {
     "A": 2,
     "B": 4,
     "C": 6,
     "D": 8
 }
+
+symbol_value = {       # How mmuch each symbol is worth (multipler)
+    "A": 5,
+    "B": 4,
+    "C": 3,
+    "D": 2
+}
+
+def check_winnings(columns, lines, bet, values):
+    for line in range(lines): 
+        symbol = columns[0][line]  
+        for column in columns:  
+            symbol_to_check = column[line]  
+            if symbol != symbol_to_check:  
+                break  
+        else:  
+            return values[symbol] * bet  
+    return 0
 
 def get_slot_machine_spin(rows, cols, symbols): 
     all_symbols = []  
@@ -108,7 +126,7 @@ def play(balance):
         if confirmation == "Y":
             balance -= total_bet
             print(f"Bet placed! ${total_bet} deducted. Remaining balance: ${balance}")
-            slots = get_slot_machine_spin(ROWS, COLS, REEL_SYMBOLS)
+            slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
             print_slot_machine(slots)
         else:
             print("Bet canceled.")
