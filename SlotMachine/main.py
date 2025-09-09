@@ -130,8 +130,10 @@ def play(balance):
             print(f"Bet placed! ${total_bet} deducted. Remaining balance: ${balance}")
             slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
             print_slot_machine(slots)
+            winnings = check_winnings(slots, lines, bet, symbol_value)
+            balance += winnings
         else:
-            print("Bet canceled.")
+            print("Bet canceled. Returning to main menu.")
     else:
         print(f"Insufficient funds. You need ${total_bet}, but you only have ${balance}.")
     
