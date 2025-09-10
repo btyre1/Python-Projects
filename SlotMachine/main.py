@@ -23,6 +23,7 @@ symbol_value = {       # How mmuch each symbol is worth (multipler)
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
+    winnings_lines = []
     for line in range(lines): 
         symbol = columns[0][line]  
         for column in columns:  
@@ -31,8 +32,9 @@ def check_winnings(columns, lines, bet, values):
                 break  
         else:  
             winnings += values[symbol] * bet 
+            winnings_lines.append(line + 1)
 
-    return winnings
+    return winnings, winnings_lines
 
 def get_slot_machine_spin(rows, cols, symbols): 
     all_symbols = []  
@@ -127,15 +129,21 @@ def play(balance):
         confirmation = get_confirmation(bet, lines, total_bet)
         if confirmation == "Y":
             balance -= total_bet
-            print(f"Bet placed! ${total_bet} deducted. Remaining balance: ${balance}")
+            print(f"\nBet placed! ${total_bet} deducted. Remaining balance: ${balance}\n")
             slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
             print_slot_machine(slots)
-            winnings = check_winnings(slots, lines, bet, symbol_value)
+            winnings, winning_lines = check_winnings(slots, lines, bet, symbol_value)
             balance += winnings
+            if winning_lines:
+                print(f"\nYou won ${winnings} on lines:", *winning_lines)
+                print(f"New balance: ${balance}")
+            else:
+                print("\nNo winnings this time. Better luck next spin!")
+            
         else:
-            print("Bet canceled. Returning to main menu.")
+            print("\nBet canceled. Returning to main menu.")
     else:
-        print(f"Insufficient funds. You need ${total_bet}, but you only have ${balance}.")
+        print(f"\nInsufficient funds. You need ${total_bet}, but you only have ${balance}.")
     
     return balance
 
