@@ -164,7 +164,7 @@ def main():
         elif choice == "3":
             balance = deposit(balance)
         elif choice == "4":
-            print("\nThanks for playing! Goodbye.")
+            print(f"\nThanks for playing! You left with ${balance}, goodbye.")
             break
         else:
             print("\nInvalid choice. Please enter an available value (1-4).")
