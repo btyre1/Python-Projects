@@ -84,7 +84,7 @@ def get_number_of_lines():
             if 1 <= lines <= MAX_LINES:  
                 break 
             else:
-                print("Amount must be a valid number.")   
+                print("Amount must be a valid number. Try again.")   
         else: 
             print("Please enter a number.")
     
@@ -167,7 +167,7 @@ def main():
             print("\nThanks for playing! Goodbye.")
             break
         else:
-            print("\nInvalid choice. Please enter 1-4.")
+            print("\nInvalid choice. Please enter an available value (1-4).")
 
 
 if __name__ == "__main__":
