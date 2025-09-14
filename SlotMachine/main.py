@@ -59,6 +59,39 @@ def print_slot_machine(columns):
     for row in range(len(columns[0])):  
         print(" | ".join(col[row] for col in columns))
 
+
+# --- STATISTICS ---
+class Statistics:
+    def __init__(self):
+        self.total_spins = 0
+        self.total_bet = 0
+        self.total_won = 0
+        self.wins = 0
+        self.losses = 0
+
+    def record_spin(self, bet, winnings):
+        self.total_spins += 1
+        self.total_bet += bet
+        self.total_won += winnings
+        if winnings > 0:
+            self.wins += 1
+        else:
+            self.losses += 1
+
+    def payout_percentage(self):
+        if self.total_bet == 0:
+            return 0.0
+        return (self.total_won / self.total_bet) * 100
+
+    def show(self):
+        print("\n--- Slot Machine Statistics ---")
+        print(f"Total spins: {self.total_spins}")
+        print(f"Total bet: ${self.total_bet}")
+        print(f"Total won: ${self.total_won}")
+        print(f"Wins: {self.wins}")
+        print(f"Losses: {self.losses}")
+        print(f"Payout percentage: {self.payout_percentage():.2f}%")
+
 def deposit(balance=0):   
     while True:  
         amount = input("\nHow much would you like to deposit? $")   
@@ -117,10 +150,11 @@ def show_menu():
     print("1. Play Slot Machine")
     print("2. Check Balance")
     print("3. Deposit Money")
-    print("4. Quit")
+    print("4. Show Statistics")
+    print("5. Quit")
 
 
-def play(balance):
+def play(balance, stats):
     lines = get_number_of_lines()
     bet = get_bet()
     total_bet = bet * lines
@@ -134,29 +168,29 @@ def play(balance):
             print_slot_machine(slots)
             winnings, winning_lines = check_winnings(slots, lines, bet, symbol_value)
             balance += winnings
+            stats.record_spin(total_bet, winnings)
             if winning_lines:
                 print(f"\nYou won ${winnings} on lines:", *winning_lines)
                 print(f"New balance: ${balance}")
             else:
                 print("\nNo winnings this time. Better luck next spin!")
-            
         else:
             print("\nBet canceled. Returning to main menu.")
     else:
         print(f"\nInsufficient funds. You need ${total_bet}, but you only have ${balance}.")
-    
     return balance
 
 
 def main():
     balance = 0
+    stats = Statistics()
     while True:
         show_menu()
-        choice = input("\nChoose an option (1-4): ")
+        choice = input("\nChoose an option (1-5): ")
 
         if choice == "1":
             if balance > 0:
-                balance = play(balance)
+                balance = play(balance, stats)
             else:
                 print("\nYou don't have any balance. Please deposit first.")
         elif choice == "2":
@@ -164,10 +198,12 @@ def main():
         elif choice == "3":
             balance = deposit(balance)
         elif choice == "4":
+            stats.show()
+        elif choice == "5":
             print(f"\nThanks for playing! You left with ${balance}, goodbye.")
             break
         else:
-            print("\nInvalid choice. Please enter an available value (1-4).")
+            print("\nInvalid choice. Please enter an available value (1-5).")
 
 
 if __name__ == "__main__":
